@@ -4,16 +4,16 @@ import (
 	"encoding/binary"
 	"io"
 	"reflect"
-	"sync"
 	"strings"
+	"sync"
 
 	"github.com/apache/thrift/lib/go/thrift"
 	"github.com/xitongsys/parquet-go/common"
 	"github.com/xitongsys/parquet-go/layout"
 	"github.com/xitongsys/parquet-go/marshal"
-	"github.com/xitongsys/parquet-go/source"
-	"github.com/xitongsys/parquet-go/schema"
 	"github.com/xitongsys/parquet-go/parquet"
+	"github.com/xitongsys/parquet-go/schema"
+	"github.com/xitongsys/parquet-go/source"
 )
 
 type ParquetReader struct {
@@ -25,8 +25,8 @@ type ParquetReader struct {
 	ColumnBuffers map[string]*ColumnBufferType
 
 	//One reader can only read one type objects
-	ObjType			reflect.Type
-	ObjPartialType	reflect.Type
+	ObjType        reflect.Type
+	ObjPartialType reflect.Type
 }
 
 //Create a parquet reader
@@ -45,7 +45,7 @@ func NewParquetReader(pFile source.ParquetFile, obj interface{}, np int64) (*Par
 			return res, err
 		}
 
-	}else{
+	} else {
 		res.SchemaHandler = schema.NewSchemaHandlerFromSchemaList(res.Footer.Schema)
 	}
 
@@ -166,7 +166,7 @@ func (self *ParquetReader) SkipRows(num int64) error {
 		}()
 	}
 
-	for key, _ := range self.ColumnBuffers {
+	for key := range self.ColumnBuffers {
 		taskChan <- key
 	}
 
@@ -186,7 +186,7 @@ func (self *ParquetReader) Read(dstInterface interface{}) error {
 
 // Read maxReadNumber objects
 func (self *ParquetReader) ReadByNumber(maxReadNumber int) ([]interface{}, error) {
-	var err error 
+	var err error
 	if self.ObjType == nil {
 		if self.ObjType, err = self.SchemaHandler.GetType(self.SchemaHandler.GetRootInName()); err != nil {
 			return nil, err
@@ -216,13 +216,13 @@ func (self *ParquetReader) ReadPartial(dstInterface interface{}, prefixPath stri
 	if err != nil {
 		return err
 	}
-	
+
 	return self.read(dstInterface, prefixPath)
 }
 
-// Read maxReadNumber partial objects 
+// Read maxReadNumber partial objects
 func (self *ParquetReader) ReadPartialByNumber(maxReadNumber int, prefixPath string) ([]interface{}, error) {
-	var err error 
+	var err error
 	if self.ObjPartialType == nil {
 		if self.ObjPartialType, err = self.SchemaHandler.GetType(prefixPath); err != nil {
 			return nil, err
@@ -285,7 +285,7 @@ func (self *ParquetReader) read(dstInterface interface{}, prefixPath string) err
 	}
 
 	readNum := 0
-	for key, _ := range self.ColumnBuffers {
+	for key := range self.ColumnBuffers {
 		if strings.HasPrefix(key, prefixPath) {
 			taskChan <- key
 			readNum++

@@ -6,9 +6,9 @@ import (
 	"fmt"
 	"io/ioutil"
 
+	"github.com/DataDog/zstd"
 	"github.com/golang/snappy"
 	"github.com/xitongsys/parquet-go/parquet"
-	"github.com/DataDog/zstd"
 )
 
 //Uncompress using Gzip

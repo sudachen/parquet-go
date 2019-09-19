@@ -4,9 +4,9 @@ import (
 	"log"
 
 	"github.com/xitongsys/parquet-go-source/local"
+	"github.com/xitongsys/parquet-go/parquet"
 	"github.com/xitongsys/parquet-go/reader"
 	"github.com/xitongsys/parquet-go/writer"
-	"github.com/xitongsys/parquet-go/parquet"
 )
 
 type Student struct {
@@ -106,18 +106,16 @@ func main() {
 			Sex:     bool(i%2 == 0),
 			Classes: []string{"Math", "Physics"},
 			Scores: map[string][]float32{
-				"Math":    []float32{89.5, 99.4},
-				"Physics": []float32{100.0, 95.3},
+				"Math":    {89.5, 99.4},
+				"Physics": {100.0, 95.3},
 			},
 
 			Friends: []struct {
 				Name string
 				Id   int64
 			}{
-				struct {
-					Name string
-					Id   int64
-				}{
+
+				{
 					Name: "Jack",
 					Id:   01,
 				},
@@ -127,10 +125,8 @@ func main() {
 				Name string
 				Id   int64
 			}{
-				struct {
-					Name string
-					Id   int64
-				}{
+
+				{
 					Name: "Tom",
 					Id:   02,
 				},
@@ -160,10 +156,10 @@ func main() {
 		return
 	}
 	/*
-	if err = pr.SetSchemaHandlerFromJSON(jsonSchema); err != nil {
-		log.Println("Can't set schema from json", err)
-		return
-	}
+		if err = pr.SetSchemaHandlerFromJSON(jsonSchema); err != nil {
+			log.Println("Can't set schema from json", err)
+			return
+		}
 	*/
 
 	num = int(pr.GetNumRows())

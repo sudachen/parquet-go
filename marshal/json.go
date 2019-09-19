@@ -8,9 +8,9 @@ import (
 
 	"github.com/xitongsys/parquet-go/common"
 	"github.com/xitongsys/parquet-go/layout"
-	"github.com/xitongsys/parquet-go/types"
-	"github.com/xitongsys/parquet-go/schema"
 	"github.com/xitongsys/parquet-go/parquet"
+	"github.com/xitongsys/parquet-go/schema"
+	"github.com/xitongsys/parquet-go/types"
 )
 
 //ss is []string
@@ -139,9 +139,9 @@ func MarshalJSON(ss []interface{}, bgn int, end int, schemaHandler *schema.Schem
 						//ExName to InName
 						keysMap[common.HeadToUpper(keys[j].String())] = j
 					}
-					for key, _ := range node.PathMap.Children {
+					for key := range node.PathMap.Children {
 						ki, ok := keysMap[key]
-						
+
 						if ok && node.Val.MapIndex(keys[ki]).Elem().IsValid() {
 							newNode := nodeBuf.GetNode()
 							newNode.PathMap = node.PathMap.Children[key]

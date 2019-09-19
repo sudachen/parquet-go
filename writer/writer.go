@@ -3,17 +3,17 @@ package writer
 import (
 	"context"
 	"encoding/binary"
+	"errors"
 	"reflect"
 	"sync"
-	"errors"
 
 	"github.com/apache/thrift/lib/go/thrift"
 	"github.com/xitongsys/parquet-go/common"
 	"github.com/xitongsys/parquet-go/layout"
 	"github.com/xitongsys/parquet-go/marshal"
-	"github.com/xitongsys/parquet-go/source"
-	"github.com/xitongsys/parquet-go/schema"
 	"github.com/xitongsys/parquet-go/parquet"
+	"github.com/xitongsys/parquet-go/schema"
+	"github.com/xitongsys/parquet-go/source"
 )
 
 //ParquetWriter is a writer  parquet file
@@ -142,7 +142,7 @@ func (self *ParquetWriter) Write(src interface{}) error {
 	}
 
 	if self.CheckSizeCritical <= ln {
-		self.ObjSize = (self.ObjSize + common.SizeOf(val))/2 + 1
+		self.ObjSize = (self.ObjSize+common.SizeOf(val))/2 + 1
 	}
 	self.ObjsSize += self.ObjSize
 	self.Objs = append(self.Objs, src)
